@@ -1,0 +1,37 @@
+﻿@model List<Materia>
+@{
+    ViewData["Title"] = "Matérias";
+}
+<div class="container">
+    <div class="row pt-4 pb-4">
+        <div class="col-6">
+            <h2 class="text-primary">Matérias</h2>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Créditos</th>
+                <th>Pré Requisito</th>
+                <th>Professor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var materia in Model)
+            {
+                string horario = "";
+                // horario = materia.Horario.Equals("Completo") ? "19:00 - 22:35" : materia.Horario.Equals("Primeira") ? "19:00 - 20:40" : materia.Horario.Equals("Última") ? "21:55 - 22:35" : "N/A";
+                <tr>
+                    <td>@materia.Id</td>
+                    <td>@materia.Nome</td>
+                    <td>@materia.Creditos</td>
+                    <td>@materia.PreRequisito?.Nome</td>
+                    <td>@(materia.Professor?.Nome ?? "N/A")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

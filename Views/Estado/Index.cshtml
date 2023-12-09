@@ -1,0 +1,31 @@
+﻿@model List<Estado>
+@{
+    ViewData["Title"] = "Estados";
+}
+<div class="container">
+    
+
+    <div class="row pt-4 pb-4">
+        <div class="col-6">
+            <h2 class="text-primary">Estado</h2>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var estado in Model)
+            {
+                <tr>
+                    <td>@estado.Id</td>
+                    <td>@estado.Nome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

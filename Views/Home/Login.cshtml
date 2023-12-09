@@ -1,0 +1,31 @@
+﻿@model ProjetoQSW.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<form asp-action="Login" method="post">
+    <div class="container">
+        <div class="row pt-4 pb-4">
+            <div class="col-6">
+                <h2 class="text-primary">Login</h2>
+                <hr />
+            </div>
+        </div>
+        <div>
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="mb-3">
+                <label asp-for="Login"></label>
+                <input asp-for="Login" class="form-control" />
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Senha"></label>
+                <input asp-for="Senha" class="form-control" type="password" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-primary form-control">Entrar</button>"
+            </div>
+        </div>
+    </div>
+</form>

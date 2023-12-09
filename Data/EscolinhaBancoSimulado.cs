@@ -1,22 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProjetoQSW.Models;
+﻿using ProjetoQSW.Models;
 
 namespace ProjetoQSW.Data
 {
-    public class EscolinhaContext : DbContext
+    public class EscolinhaBancoSimulado
     {
+        public List<Professor>? Professores { get; set; }
+        public List<Estado>? Estados { get; set; }
+        public List<Aluno>? Alunos { get; set; }
+        public List<Materia>? Materias { get; set; }
+        public List<Historico>? Historicos { get; set; }
+        public List<Turma>? Turmas { get; set; }
+        public bool? EhLogado { get; set; } = false;
+        public bool EhPopulado { get; set; } = false;
 
-        public EscolinhaContext(DbContextOptions<EscolinhaContext> opcoes) : base(opcoes) 
+        public EscolinhaBancoSimulado()
         {
+            if(!EhPopulado)
+            {
+                PopularBancoSimulado();
+            }
+            
         }
-        public DbSet<Professor>? Professores { get; set; }
-        public DbSet<Estado>? Estados { get; set; }
-        public DbSet<Aluno>? Alunos { get; set; }
-        public DbSet<Materia>? Materias { get; set; }
-        public DbSet<Historico>? Historicos { get; set; }
-        public DbSet<Turma>? Turmas { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+        public void PopularBancoSimulado()
         {
             /****************************** INSERTS PROFESSOR  ******************************/
 
@@ -96,8 +103,8 @@ namespace ProjetoQSW.Data
                 Nome = "Yuri Flores Albuquerque"
             };
 
-            modelBuilder.Entity<Professor>().HasData
-            (
+            Professores = new List<Professor>()
+            {
                 anaPaula,
                 andreLuis,
                 cesarAlexandre,
@@ -113,7 +120,8 @@ namespace ProjetoQSW.Data
                 talitaDePaula,
                 wilsonVendramel,
                 yuriAlbuquerque
-            );
+
+            };
 
             /****************************** INSERTS MATERIA  ******************************/
 
@@ -122,7 +130,6 @@ namespace ProjetoQSW.Data
                 Id = 1,
                 Nome = "Análise Orientada a Objetos",
                 Creditos = 4,
-                ProfessorId = anaPaula.Id,
                 Professor = anaPaula
             };
             var arquiteturaDeSoftware = new Materia
@@ -130,7 +137,6 @@ namespace ProjetoQSW.Data
                 Id = 2,
                 Nome = "Arquitetura de Software",
                 Creditos = 4,
-                ProfessorId = wilsonVendramel.Id,
                 Professor = wilsonVendramel
             };
             var bancoDeDadosI = new Materia
@@ -138,7 +144,6 @@ namespace ProjetoQSW.Data
                 Id = 3,
                 Nome = "Banco de Dados I",
                 Creditos = 4,
-                ProfessorId = lucieneAngelica.Id,
                 Professor = lucieneAngelica
             };
             var desenvolvimentoDeSistemasWeb = new Materia
@@ -146,7 +151,6 @@ namespace ProjetoQSW.Data
                 Id = 4,
                 Nome = "Desenvolvimento de Sistemas Web",
                 Creditos = 4,
-                ProfessorId = anaPaula.Id,
                 Professor = anaPaula
             };
             var engenhariaDeSoftware = new Materia
@@ -154,7 +158,6 @@ namespace ProjetoQSW.Data
                 Id = 5,
                 Nome = "Engenharia de Software",
                 Creditos = 4,
-                ProfessorId = raphaelNaves.Id,
                 Professor = raphaelNaves
             };
             var estatistica = new Materia
@@ -162,7 +165,6 @@ namespace ProjetoQSW.Data
                 Id = 6,
                 Nome = "Estatística",
                 Creditos = 2,
-                ProfessorId = denizePalmito.Id,
                 Professor = denizePalmito
             };
             var estruturaDeDadosI = new Materia
@@ -170,7 +172,6 @@ namespace ProjetoQSW.Data
                 Id = 7,
                 Nome = "Estrutura de Dados I",
                 Creditos = 4,
-                ProfessorId = rafaelMuniz.Id,
                 Professor = rafaelMuniz
             };
             var estruturaDeDadosII = new Materia
@@ -178,7 +179,6 @@ namespace ProjetoQSW.Data
                 Id = 8,
                 Nome = "Estrutura de Dados II",
                 Creditos = 4,
-                ProfessorId= rafaelMuniz.Id,
                 Professor = rafaelMuniz
             };
             var gestaoDeProjetos = new Materia
@@ -186,7 +186,6 @@ namespace ProjetoQSW.Data
                 Id = 9,
                 Nome = "Gestão de Projetos",
                 Creditos = 4,
-                ProfessorId = andreLuis.Id,
                 Professor = andreLuis
             };
             var historiaECienciaDaTecnologia = new Materia
@@ -194,7 +193,6 @@ namespace ProjetoQSW.Data
                 Id = 10,
                 Nome = "História da Ciência e Tecnologia",
                 Creditos = 2,
-                ProfessorId = eversonNunes.Id,
                 Professor = eversonNunes
             };
             var interacaoHumanoComputador = new Materia
@@ -202,7 +200,6 @@ namespace ProjetoQSW.Data
                 Id = 11,
                 Nome = "Interação Humano-Computador",
                 Creditos = 2,
-                ProfessorId = talitaDePaula.Id,
                 Professor = talitaDePaula
             };
             var linguagemDeProgramacaoIII = new Materia
@@ -210,7 +207,6 @@ namespace ProjetoQSW.Data
                 Id = 12,
                 Nome = "Linguagem de Programação III",
                 Creditos = 4,
-                ProfessorId = flavioCezar.Id,
                 Professor = flavioCezar
             };
             var matematica = new Materia
@@ -218,7 +214,6 @@ namespace ProjetoQSW.Data
                 Id = 13,
                 Nome = "Matemática",
                 Creditos = 4,
-                ProfessorId = yuriAlbuquerque.Id,
                 Professor = yuriAlbuquerque
             };
             var matematicaFinanceira = new Materia
@@ -226,7 +221,6 @@ namespace ProjetoQSW.Data
                 Id = 14,
                 Nome = "Matemática Financeira",
                 Creditos = 2,
-                ProfessorId = yuriAlbuquerque.Id,
                 Professor = yuriAlbuquerque
             };
             var metodologiaDePesquisaCientificaETecnologica = new Materia
@@ -234,7 +228,6 @@ namespace ProjetoQSW.Data
                 Id = 15,
                 Nome = "Metodologia de Pesquisa Científica e Tecnológica",
                 Creditos = 2,
-                ProfessorId = cristinaCorrea.Id,
                 Professor = cristinaCorrea
             };
             var metodologiasAgeis = new Materia
@@ -242,7 +235,6 @@ namespace ProjetoQSW.Data
                 Id = 16,
                 Nome = "Metodologias Ágeis",
                 Creditos = 2,
-                ProfessorId = andreLuis.Id,
                 Professor = andreLuis
             };
             var programacaoOrientadaAObjetos = new Materia
@@ -250,7 +242,6 @@ namespace ProjetoQSW.Data
                 Id = 17,
                 Nome = "Programação Orientada a Objetos",
                 Creditos = 4,
-                ProfessorId = elisandraAparecida.Id,
                 Professor = elisandraAparecida
             };
             var projetosDeSistemasI = new Materia
@@ -258,7 +249,6 @@ namespace ProjetoQSW.Data
                 Id = 18,
                 Nome = "Projeto de Sistemas I",
                 Creditos = 2,
-                ProfessorId = cesarAlexandre.Id,
                 Professor = cesarAlexandre
             };
             var qualidadeDeSoftware = new Materia
@@ -266,7 +256,6 @@ namespace ProjetoQSW.Data
                 Id = 19,
                 Nome = "Qualidade de Software",
                 Creditos = 4,
-                ProfessorId = wilsonVendramel.Id,
                 Professor = wilsonVendramel
             };
             var redesDeComputadores = new Materia
@@ -274,7 +263,6 @@ namespace ProjetoQSW.Data
                 Id = 20,
                 Nome = "Rede de Computadores",
                 Creditos = 4,
-                ProfessorId = flavioCezar.Id,
                 Professor = flavioCezar
             };
             var servicoesDeRedes = new Materia
@@ -282,36 +270,20 @@ namespace ProjetoQSW.Data
                 Id = 21,
                 Nome = "Serviços de Rede",
                 Creditos = 4,
-                ProfessorId = lucianoBernardes.Id,
                 Professor = lucianoBernardes
             };
 
             arquiteturaDeSoftware.PreRequisito = engenhariaDeSoftware;
-            arquiteturaDeSoftware.PreRquisitoId = engenhariaDeSoftware.Id;
-
             estatistica.PreRequisito = matematica;
-            estatistica.PreRquisitoId = matematica.Id;
-
             estruturaDeDadosII.PreRequisito = estruturaDeDadosI;
-            estruturaDeDadosII.PreRquisitoId = estruturaDeDadosI.Id;
-
             linguagemDeProgramacaoIII.PreRequisito = interacaoHumanoComputador;
-            linguagemDeProgramacaoIII.PreRquisitoId = interacaoHumanoComputador.Id;
-
             matematicaFinanceira.PreRequisito = matematica;
-            matematicaFinanceira.PreRquisitoId = matematica.Id;
-
             programacaoOrientadaAObjetos.PreRequisito = analiseOrientadaAObjetos;
-            programacaoOrientadaAObjetos.PreRquisitoId = analiseOrientadaAObjetos.Id;
-
             qualidadeDeSoftware.PreRequisito = arquiteturaDeSoftware;
-            qualidadeDeSoftware.PreRquisitoId = arquiteturaDeSoftware.Id;
-
             servicoesDeRedes.PreRequisito = redesDeComputadores;
-            servicoesDeRedes.PreRquisitoId = redesDeComputadores.Id;
 
-            modelBuilder.Entity<Materia>().HasData
-            (
+            Materias = new List<Materia>()
+            {
                 analiseOrientadaAObjetos,
                 arquiteturaDeSoftware,
                 bancoDeDadosI,
@@ -333,7 +305,7 @@ namespace ProjetoQSW.Data
                 qualidadeDeSoftware,
                 redesDeComputadores,
                 servicoesDeRedes
-            );
+            };
 
             /****************************** INSERTS ESTADO  ******************************/
 
@@ -363,14 +335,16 @@ namespace ProjetoQSW.Data
                 Nome = "Lista de Espera"
             };
 
-            modelBuilder.Entity<Estado>().HasData
-            (
+            Estados = new List<Estado>()
+            {
                 aprovado,
                 reprovado,
                 naoCursado,
                 incrito,
                 listaDeEspera
-            );
+            };
+
+
 
             /****************************** INSERTS ALUNO  ******************************/
 
@@ -487,7 +461,7 @@ namespace ProjetoQSW.Data
                 Senha = "Senha123"
             };
 
-            var alunos = new List<Aluno>
+            Alunos = new List<Aluno>()
             {
                 aluno1,
                 aluno2,
@@ -507,25 +481,222 @@ namespace ProjetoQSW.Data
                 aluno16
             };
 
-            modelBuilder.Entity<Aluno>().HasData
-            (
-                aluno1,
-                aluno2,
-                aluno3,
-                aluno4,
-                aluno5,
-                aluno6,
-                aluno7,
-                aluno8,
-                aluno9,
-                aluno10,
-                aluno11,
-                aluno12,
-                aluno13,
-                aluno14,
-                aluno15,
-                aluno16
-            );
+            /****************************** INSERTS TURMA  ******************************/
+
+            var turmaAnaliseOrientadaAObjetos = new Turma
+            {
+                Id = 1,
+                Dia = "Terça",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = analiseOrientadaAObjetos,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaArquiteturaDeSoftware = new Turma
+            {
+                Id = 2,
+                Dia = "Terça",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = arquiteturaDeSoftware,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaBancoDeDadosI = new Turma
+            {
+                Id = 3,
+                Dia = "Segunda",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = bancoDeDadosI,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaDesenvolvimentoDeSistemasWeb = new Turma
+            {
+                Id = 4,
+                Dia = "Quarta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = desenvolvimentoDeSistemasWeb,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaEngenhariaDeSoftware = new Turma
+            {
+                Id = 5,
+                Dia = "Quarta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = engenhariaDeSoftware,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaEstatistica = new Turma
+            {
+                Id = 6,
+                Dia = "Quarta",
+                Horario = "Última",
+                Vagas = 8,
+                Materia = estatistica,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaEstruturaDeDadosI = new Turma
+            {
+                Id = 7,
+                Dia = "Sexta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = estruturaDeDadosI,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaEstruturaDeDadosII = new Turma
+            {
+                Id = 8,
+                Dia = "Quinta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = estruturaDeDadosII,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaGestaoDeProjetos = new Turma
+            {
+                Id = 9,
+                Dia = "Sexta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = gestaoDeProjetos,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaHistoriaECienciaDaTecnologia = new Turma
+            {
+                Id = 10,
+                Dia = "Quinta",
+                Horario = "Última",
+                Vagas = 8,
+                Materia = historiaECienciaDaTecnologia,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaInteracaoHumanoComputador = new Turma
+            {
+                Id = 11,
+                Dia = "Segunda",
+                Horario = "Última",
+                Vagas = 8,
+                Materia = interacaoHumanoComputador,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaLinguagemDeProgramacaoIII = new Turma
+            {
+                Id = 12,
+                Dia = "Quinta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = linguagemDeProgramacaoIII,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaMatematica = new Turma
+            {
+                Id = 13,
+                Dia = "Quinta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = matematica,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaMatematicaFinanceira = new Turma
+            {
+                Id = 14,
+                Dia = "Segunda",
+                Horario = "Primeira",
+                Vagas = 8,
+                Materia = matematicaFinanceira,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaMetodologiaDePesquisaCientificaETecnologica = new Turma
+            {
+                Id = 15,
+                Dia = "Quarta",
+                Horario = "Primeira",
+                Vagas = 8,
+                Materia = metodologiaDePesquisaCientificaETecnologica,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaMetodologiasAgeis = new Turma
+            {
+                Id = 16,
+                Dia = "Segunda",
+                Horario = "Primeira",
+                Vagas = 8,
+                Materia = metodologiasAgeis,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaProgramacaoOrientadaAObjetos = new Turma
+            {
+                Id = 17,
+                Dia = "Segunda",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = programacaoOrientadaAObjetos,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaProjetosDeSistemasI = new Turma
+            {
+                Id = 18,
+                Dia = "Segunda",
+                Horario = "Última",
+                Vagas = 8,
+                Materia = projetosDeSistemasI,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaQualidadeDeSoftware = new Turma
+            {
+                Id = 19,
+                Dia = "Quinta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = qualidadeDeSoftware,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaRedesDeComputadores = new Turma
+            {
+                Id = 20,
+                Dia = "Sexta",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = redesDeComputadores,
+                AlunosInscritos = new List<Aluno>()
+            };
+            var turmaServicoesDeRedes = new Turma
+            {
+                Id = 21,
+                Dia = "Terça",
+                Horario = "Completo",
+                Vagas = 16,
+                Materia = servicoesDeRedes,
+                AlunosInscritos = new List<Aluno>()
+            };
+
+            Turmas = new List<Turma>()
+            {
+                turmaAnaliseOrientadaAObjetos,
+                turmaArquiteturaDeSoftware,
+                turmaBancoDeDadosI,
+                turmaDesenvolvimentoDeSistemasWeb,
+                turmaEngenhariaDeSoftware,
+                turmaEstatistica,
+                turmaEstruturaDeDadosI,
+                turmaEstruturaDeDadosII,
+                turmaGestaoDeProjetos,
+                turmaHistoriaECienciaDaTecnologia,
+                turmaInteracaoHumanoComputador,
+                turmaLinguagemDeProgramacaoIII,
+                turmaMatematica,
+                turmaMatematicaFinanceira,
+                turmaMetodologiaDePesquisaCientificaETecnologica,
+                turmaMetodologiasAgeis,
+                turmaProgramacaoOrientadaAObjetos,
+                turmaProjetosDeSistemasI,
+                turmaQualidadeDeSoftware,
+                turmaRedesDeComputadores,
+                turmaServicoesDeRedes
+            };
 
             /****************************** INSERTS HISTORICO  ******************************/
 
@@ -552,303 +723,47 @@ namespace ProjetoQSW.Data
                 gestaoDeProjetos
             };
 
-            var historicos = new List<Historico>();
+            Historicos = new List<Historico>();
 
-            var id = 1;
-            foreach (Aluno aluno in alunos)
+            foreach (Aluno aluno in Alunos)
             {
+                var id = 1;
                 foreach (Materia materia in materiasHistorico)
                 {
-                    historicos.Add
+                    Historicos.Add
                     (
                         new Historico()
                         {
                             Id = id,
                             Materia = materia,
-                            MateriaId = materia.Id,
                             Estado = aprovado,
-                            EstadoId = aprovado.Id,
-                            Aluno = aluno,
-                            AlunoId = aluno.Id
+                            Aluno = aluno
                         }
                     );
                     id++;
                 }
-                historicos.Add
+                Historicos.Add
                 (
                     new Historico()
                     {
                         Id = id,
                         Materia = interacaoHumanoComputador,
-                        MateriaId = interacaoHumanoComputador.Id,
                         Estado = reprovado,
-                        EstadoId= reprovado.Id,
-                        Aluno = aluno,
-                        AlunoId = aluno.Id
+                        Aluno = aluno
                     }
                 );
                 id++;
-                historicos.Add
+                Historicos.Add
                 (
                     new Historico()
                     {
                         Id = id,
                         Materia = historiaECienciaDaTecnologia,
-                        MateriaId = historiaECienciaDaTecnologia.Id,
                         Estado = reprovado,
-                        EstadoId = reprovado.Id,
-                        Aluno = aluno,
-                        AlunoId= aluno.Id
+                        Aluno = aluno
                     }
                 );
-                id++;
             }
-
-            foreach (var historico in historicos)
-            {
-                modelBuilder.Entity<Historico>().HasData(historico);
-            }
-
-
-            /****************************** INSERTS TURMA  ******************************/
-
-            var turmaAnaliseOrientadaAObjetos = new Turma
-            {
-                Id = 1,
-                Dia = "Terça",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = analiseOrientadaAObjetos,
-                MateriaId = analiseOrientadaAObjetos.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaArquiteturaDeSoftware = new Turma
-            {
-                Id = 2,
-                Dia = "Terça",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = arquiteturaDeSoftware,
-                MateriaId = arquiteturaDeSoftware.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaBancoDeDadosI = new Turma
-            {
-                Id = 3,
-                Dia = "Segunda",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = bancoDeDadosI,
-                MateriaId = bancoDeDadosI.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaDesenvolvimentoDeSistemasWeb = new Turma
-            {
-                Id = 4,
-                Dia = "Quarta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = desenvolvimentoDeSistemasWeb,
-                MateriaId = desenvolvimentoDeSistemasWeb.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaEngenhariaDeSoftware = new Turma
-            {
-                Id = 5,
-                Dia = "Quarta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = engenhariaDeSoftware,
-                MateriaId = engenhariaDeSoftware.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaEstatistica = new Turma
-            {
-                Id = 6,
-                Dia = "Quarta",
-                Horario = "Última",
-                Vagas = 8,
-                Materia = estatistica,
-                MateriaId = estatistica.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaEstruturaDeDadosI = new Turma
-            {
-                Id = 7,
-                Dia = "Sexta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = estruturaDeDadosI,
-                MateriaId = estruturaDeDadosI.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaEstruturaDeDadosII = new Turma
-            {
-                Id = 8,
-                Dia = "Quinta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = estruturaDeDadosII,
-                MateriaId = estruturaDeDadosII.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaGestaoDeProjetos = new Turma
-            {
-                Id = 9,
-                Dia = "Sexta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = gestaoDeProjetos,
-                MateriaId = gestaoDeProjetos.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaHistoriaECienciaDaTecnologia = new Turma
-            {
-                Id = 10,
-                Dia = "Quinta",
-                Horario = "Última",
-                Vagas = 8,
-                Materia = historiaECienciaDaTecnologia,
-                MateriaId = historiaECienciaDaTecnologia.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaInteracaoHumanoComputador = new Turma
-            {
-                Id = 11,
-                Dia = "Segunda",
-                Horario = "Última",
-                Vagas = 8,
-                Materia = interacaoHumanoComputador,
-                MateriaId = interacaoHumanoComputador.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaLinguagemDeProgramacaoIII = new Turma
-            {
-                Id = 12,
-                Dia = "Quinta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = linguagemDeProgramacaoIII,
-                MateriaId = linguagemDeProgramacaoIII.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaMatematica = new Turma
-            {
-                Id = 13,
-                Dia = "Quinta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = matematica,
-                MateriaId = matematica.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaMatematicaFinanceira = new Turma
-            {
-                Id = 14,
-                Dia = "Segunda",
-                Horario = "Primeira",
-                Vagas = 8,
-                Materia = matematicaFinanceira,
-                MateriaId = matematicaFinanceira.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaMetodologiaDePesquisaCientificaETecnologica = new Turma
-            {
-                Id = 15,
-                Dia = "Quarta",
-                Horario = "Primeira",
-                Vagas = 8,
-                Materia = metodologiaDePesquisaCientificaETecnologica,
-                MateriaId = metodologiaDePesquisaCientificaETecnologica.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaMetodologiasAgeis = new Turma
-            {
-                Id = 16,
-                Dia = "Segunda",
-                Horario = "Primeira",
-                Vagas = 8,
-                Materia = metodologiasAgeis,
-                MateriaId = metodologiasAgeis.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaProgramacaoOrientadaAObjetos = new Turma
-            {
-                Id = 17,
-                Dia = "Segunda",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = programacaoOrientadaAObjetos,
-                MateriaId = programacaoOrientadaAObjetos.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaProjetosDeSistemasI = new Turma
-            {
-                Id = 18,
-                Dia = "Segunda",
-                Horario = "Última",
-                Vagas = 8,
-                Materia = projetosDeSistemasI,
-                MateriaId = projetosDeSistemasI.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaQualidadeDeSoftware = new Turma
-            {
-                Id = 19,
-                Dia = "Quinta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = qualidadeDeSoftware,
-                MateriaId = qualidadeDeSoftware.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaRedesDeComputadores = new Turma
-            {
-                Id = 20,
-                Dia = "Sexta",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = redesDeComputadores,
-                MateriaId = redesDeComputadores.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-            var turmaServicoesDeRedes = new Turma
-            {
-                Id = 21,
-                Dia = "Terça",
-                Horario = "Completo",
-                Vagas = 16,
-                Materia = servicoesDeRedes,
-                MateriaId = servicoesDeRedes.Id,
-                AlunosInscritos = new List<Aluno>()
-            };
-
-            modelBuilder.Entity<Turma>().HasData
-            (
-                turmaAnaliseOrientadaAObjetos,
-                turmaArquiteturaDeSoftware,
-                turmaBancoDeDadosI,
-                turmaDesenvolvimentoDeSistemasWeb,
-                turmaEngenhariaDeSoftware,
-                turmaEstatistica,
-                turmaEstruturaDeDadosI,
-                turmaEstruturaDeDadosII,
-                turmaGestaoDeProjetos,
-                turmaHistoriaECienciaDaTecnologia,
-                turmaInteracaoHumanoComputador,
-                turmaLinguagemDeProgramacaoIII,
-                turmaMatematica,
-                turmaMatematicaFinanceira,
-                turmaMetodologiaDePesquisaCientificaETecnologica,
-                turmaMetodologiasAgeis,
-                turmaProgramacaoOrientadaAObjetos,
-                turmaProjetosDeSistemasI,
-                turmaQualidadeDeSoftware,
-                turmaRedesDeComputadores,
-                turmaServicoesDeRedes
-            );
         }
     }
-
-
 }

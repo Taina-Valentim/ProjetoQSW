@@ -1,0 +1,78 @@
+﻿@model ProjetoQSW.ViewModels.TurmaViewModel
+@{
+    ViewData["Title"] = "Criar Grade";
+}
+<div class="container">
+    <div class="row pt-4 pb-4">
+        <div class="col-6">
+            <h2 class="text-primary">Criar Grade</h2>
+            <hr />
+        </div>
+    </div>
+    <div class="row pt-8 pb-4">
+        <div class="col-6">
+            <h4 class="text-secondary">Aluno: @Model.Aluno.Nome</h4>
+            <hr />
+        </div>
+    </div>
+
+
+    <div class="row mt-2 mb-2">
+        <form asp-action="Inscrever" method="post">
+            <input type="hidden" asp-for="AlunoId" class="form-control" value="@Model.AlunoId" />
+            <input type="hidden" asp-for="Aluno" class="form-control" value="@Model.Aluno" />
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-1"></th>
+                        <th class="col-2">Matéria</th>
+                        <th class="col-2">Dia</th>
+                        <th class="col-2">Horário</th>
+                        <th class="col-2">Professor</th>
+                        <th class="col-1">Disponibilidade</th>
+                        <th class="col-2">Pré Requisito</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (Turma turmas in Model.Turmas)
+                        {
+                            var alunosInscritos = turmas?.AlunosInscritos?.Count;
+                            alunosInscritos = alunosInscritos != null ? alunosInscritos : 0;
+                            var disponibilidade = alunosInscritos + "/" + turmas?.Vagas;
+                            <tr>
+                                <td> <input type="checkbox" name="selecionarMateria" value="@turmas?.Materia?.Id" /> </td>
+                                <td>@turmas.Materia?.Nome</td>
+                                <td>@turmas.Dia</td>
+                                <td>@turmas.Horario</td>
+                                <td>@turmas.Materia?.Professor?.Nome</td>
+                                <td>@disponibilidade</td>
+                                <td>@turmas.Materia?.PreRequisito?.Nome</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+            <div class="row mt-5">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary form-control">Inscrever-se</button>"
+                </div>
+                <div class="col-6">
+                    <a asp-controller="Turma" asp-action="Index" class="btn btn-outline-secondary border form-control">
+                        Voltar Para a Lista
+                    </a>
+                </div>
+            </div>
+        </form>
+        <hr />
+    </div>
+
+
+
+        
+    </div>
+
+
+

@@ -1,0 +1,68 @@
+﻿@model ProjetoQSW.ViewModels.TurmaViewModel
+@{
+    ViewData["Title"] = "Turmas";
+}
+<div class="container">
+    <div class="row pt-4 pb-4">
+        <div class="col-6">
+            <h2 class="text-primary">Turmas</h2>
+            <hr />
+        </div>
+    </div>
+    <div class="row pt-8 pb-4">
+        <div class="col-6">
+            <h4 class="text-secondary">Aluno: @Model.Aluno.Nome</h4>
+            <hr />
+        </div>
+    </div>
+
+    <div class="col-4">
+        <form method="post" asp-controller="Turma" asp-action="Inscrever" class="form-control">
+            <input type="hidden" asp-for="AlunoId" class="form-control" value="@Model.AlunoId" />
+            <button type="submit" class="btn btn-outline-secondary border form-control">
+                Cadastrar em Nova Turma
+            </button>
+        </form>
+    </div>
+
+    <div class="row mt-2 mb-2 col-6">
+    <h4>Total de créditos usados: @Model.TotalCreditos</h4>
+        <hr />
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th class="col-1">Horário</th>
+                <th class="col-2">Segunda</th>
+                <th class="col-2">Terça</th>
+                <th class="col-2">Quarta</th>
+                <th class="col-2">Quinta</th>
+                <th class="col-2">Sexta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if(Model.Turmas != null)
+                {
+                    <tr>
+                        <td>19:00 - 20:40</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Segunda")?.FirstOrDefault(x => x.Horario == "Primeira" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Terça")?.FirstOrDefault(x => x.Horario == "Primeira" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Quarta")?.FirstOrDefault(x => x.Horario == "Primeira" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Quinta")?.FirstOrDefault(x => x.Horario == "Primeira" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Sexta")?.FirstOrDefault(x => x.Horario == "Primeira" || x.Horario == "Completo")?.Materia?.Nome</td>
+                    </tr>
+                    <tr>
+                        <td>21:55 - 22:35</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Segunda")?.FirstOrDefault(x => x.Horario == "Última" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Terça")?.FirstOrDefault(x => x.Horario == "Última" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Quarta")?.FirstOrDefault(x => x.Horario == "Última" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Quinta")?.FirstOrDefault(x => x.Horario == "Última" || x.Horario == "Completo")?.Materia?.Nome</td>
+                        <td>@Model.Turmas?.Where(x => x.Dia == "Sexta")?.FirstOrDefault(x => x.Horario == "Última" || x.Horario == "Completo")?.Materia?.Nome</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

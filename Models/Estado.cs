@@ -1,4 +1,7 @@
-﻿namespace ProjetoQSW.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace ProjetoQSW.Models
 {
     public class Estado
     {

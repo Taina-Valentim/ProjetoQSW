@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace ProjetoQSW.Models
 {
@@ -8,6 +9,5 @@ namespace ProjetoQSW.Models
         public required string Nome { get; set; }
         public required string Login { get; set; }
         public required string Senha { get; set; }
-        public ICollection<Grade> Grades { get; set; }
     }
 }
