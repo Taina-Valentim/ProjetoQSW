@@ -11,46 +11,36 @@ namespace ProjetoQSW.Controllers
     
     public class TurmaController : Controller
     {
-        private readonly EscolinhaContext _db;
-        public TurmaController(EscolinhaContext db)
+        public EscolinhaBancoSimulado db = new EscolinhaBancoSimulado();
+        public IActionResult Index(int idAluno, List<int> ids)
         {
-            _db = db;
-        }
-        public IActionResult Index(string login)
-        {
+            db.PopularBancoSimulado();
             var viewModel = new TurmaViewModel();
-            if (_db.Turmas.Any(x => x.AlunosInscritos.Any(x => x.Login == login)))
+            viewModel.AlunoId = db.Alunos.FirstOrDefault(x => x.Id == idAluno).Id;
+            viewModel.Aluno = db.Alunos.FirstOrDefault(x => x.Id == viewModel.AlunoId);
+            foreach (int id in ids)
             {
-                viewModel.AlunoId = _db.Alunos.FirstOrDefault(x => x.Login == login).Id;
-                viewModel.Aluno = _db.Alunos.FirstOrDefault(x => x.Login == login);
-                viewModel.Turmas = _db.Turmas.Where(x => x.AlunosInscritos.Any(x => x.Login == login)).ToList();
-                foreach (Turma turma in viewModel.Turmas)
-                {
-                    viewModel.TotalCreditos += turma.Materia.Creditos;
-                }
+                db.Turmas.FirstOrDefault(x => x.Id == id).AlunosInscritos.Add(viewModel.Aluno);
             }
-
-            else
-            {
-                viewModel.AlunoId = _db.Alunos.FirstOrDefault(x => x.Login == login).Id;
-                viewModel.TotalCreditos = 0;
-                return RedirectToAction("Inscrever", "Turma", viewModel);
-            }
-
+            viewModel.Turmas = db.Turmas.Where(x => x.AlunosInscritos.Any(x => x.Id == viewModel.AlunoId)).ToList();
             return View(viewModel);
         }
 
-        public IActionResult Inscrever(TurmaViewModel viewModel, string[] materiasSelecionadas)
+        public IActionResult Inscrever(TurmaViewModel viewModel, string login)
         {
-            viewModel.Aluno = _db.Alunos.FirstOrDefault(x => x.Id == viewModel.AlunoId);
-            viewModel.Turmas = _db.Turmas.ToList();
+            db.PopularBancoSimulado();
+            viewModel.AlunoId = db.Alunos.FirstOrDefault(x => x.Login == login).Id;
+            viewModel.TotalCreditos = 0;
+            viewModel.Aluno = db.Alunos.FirstOrDefault(x => x.Id == viewModel.AlunoId);
+            viewModel.Turmas = db.Turmas.ToList();
             return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult Inscrever(TurmaViewModel viewModel)
         {
-            viewModel.Aluno = _db.Alunos?.FirstOrDefault(x => x.Id == viewModel.AlunoId);
+            db.PopularBancoSimulado();
+            viewModel.Aluno = db.Alunos?.FirstOrDefault(x => x.Id == viewModel.AlunoId);
             
             string[] materiasSelecionadas = Request.Form["selecionarMateria"];
             List<int> idsConvertidos = new List<int>();
@@ -70,25 +60,23 @@ namespace ProjetoQSW.Controllers
 
             if(ModelState.IsValid)
             {
-                foreach (int id in idsConvertidos)
-                {
-                    _db.Turmas.FirstOrDefault(x => x.Id == id).AlunosInscritos.Add(viewModel.Aluno);
-                }
-                return RedirectToAction("Index", "Turma", new {login = viewModel.Aluno.Login});
+                
+                return RedirectToAction("Index", "Turma", new {idAluno = viewModel.AlunoId, ids = idsConvertidos});
 
             }
             else
             {
-                viewModel.Turmas = _db.Turmas.ToList();
+                viewModel.Turmas = db.Turmas.ToList();
             }
             return View(viewModel);
         }
         public void VerificaDisponibilidade(List<int> turmasSelecionadas)
         {
-            foreach(var turmaId in turmasSelecionadas)
+            db.PopularBancoSimulado();
+            foreach (var turmaId in turmasSelecionadas)
             {
-                var totalVagas = _db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Vagas;
-                var numeroInscritos = _db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.AlunosInscritos?.Count;
+                var totalVagas = db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Vagas;
+                var numeroInscritos = db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.AlunosInscritos?.Count;
                 if (numeroInscritos == null) numeroInscritos = 0;
                 if(!(totalVagas > numeroInscritos))
                 {
@@ -99,8 +87,9 @@ namespace ProjetoQSW.Controllers
         
         public void VerificaChoqueHorarios(TurmaViewModel viewModel, List<int> turmasSelecionadas)
         {
+            db.PopularBancoSimulado();
             var turmasIncrito = viewModel.Turmas;
-            var turmas = _db.Turmas?.Where(x => turmasSelecionadas.Contains(x.Id));
+            var turmas = db.Turmas?.Where(x => turmasSelecionadas.Contains(x.Id));
 
             foreach (var turmaId in turmasSelecionadas)
             {
@@ -113,8 +102,8 @@ namespace ProjetoQSW.Controllers
                     }
                 }
 
-                var dia = _db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Dia;
-                var horario = _db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Horario;
+                var dia = db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Dia;
+                var horario = db.Turmas?.FirstOrDefault(x => x.Materia.Id == turmaId)?.Horario;
 
                 if(turmas.Count(x => x.Dia == dia &&  x.Horario == horario) > 1)
                 {
@@ -125,10 +114,11 @@ namespace ProjetoQSW.Controllers
 
         public void VerificaCreditos(TurmaViewModel viewModel, List<int> materiasSelecionadas)
         {
+            db.PopularBancoSimulado();
             var creditos = 0;
             foreach (var materiaId in materiasSelecionadas)
             {
-                creditos += _db.Materias.FirstOrDefault(x => x.Id == materiaId).Creditos;
+                creditos += db.Materias.FirstOrDefault(x => x.Id == materiaId).Creditos;
             }
             if(creditos > 20)
             {
@@ -138,12 +128,13 @@ namespace ProjetoQSW.Controllers
 
         public void VerificaPreRequisito(TurmaViewModel viewModel, List<int> materiasSelecionadas)
         {
+            db.PopularBancoSimulado();
             foreach (var materiaId in materiasSelecionadas)
             {
-                if(_db.Materias.FirstOrDefault(x => x.Id == materiaId).PreRequisito != null)
+                if(db.Materias.FirstOrDefault(x => x.Id == materiaId).PreRequisito != null)
                 {
-                    var materiasAprovado = _db.Historicos.Where(x => x.Aluno.Id == viewModel.AlunoId && x.Estado.Nome.Equals("Aprovado"));
-                    var preRequisito = _db.Materias.FirstOrDefault(x => x.Id == materiaId)?.PreRequisito;
+                    var materiasAprovado = db.Historicos.Where(x => x.Aluno.Id == viewModel.AlunoId && x.Estado.Nome.Equals("Aprovado"));
+                    var preRequisito = db.Materias.FirstOrDefault(x => x.Id == materiaId)?.PreRequisito;
                     var preRequisitoCursado = materiasAprovado.Any(x => x.Materia.Id == preRequisito.Id);
                     if(!preRequisitoCursado)
                     {
@@ -155,7 +146,8 @@ namespace ProjetoQSW.Controllers
 
         public void VerificaJaCursado(TurmaViewModel viewModel, List<int> materiasSelecionadas)
         {
-            var materiasAprovado = _db.Historicos.Where(x => x.Aluno.Id == viewModel.AlunoId && x.Estado.Nome.Equals("Aprovado"));
+            db.PopularBancoSimulado();
+            var materiasAprovado = db.Historicos.Where(x => x.Aluno.Id == viewModel.AlunoId && x.Estado.Nome.Equals("Aprovado"));
             foreach (var materiaId in materiasSelecionadas)
             {
                 if(materiasAprovado.Any(x => x.Materia.Id == materiaId))

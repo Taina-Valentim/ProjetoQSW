@@ -8,11 +8,7 @@ namespace ProjetoQSW.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly EscolinhaContext _db;
-        public HomeController(EscolinhaContext db)
-        {
-            _db = db;
-        }
+        public EscolinhaBancoSimulado db = new EscolinhaBancoSimulado();
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -23,6 +19,7 @@ namespace ProjetoQSW.Controllers
 
         public IActionResult Login()
         {
+            db.PopularBancoSimulado();
             var viewModel = new LoginViewModel() { Login = "", Senha = "" };
             return View(viewModel);
         }
@@ -30,6 +27,7 @@ namespace ProjetoQSW.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel viewModel)
         {
+            db.PopularBancoSimulado();
             if (viewModel.Login == null)
             {
                 ModelState.AddModelError("login", "O login é obrigatório");
@@ -45,11 +43,11 @@ namespace ProjetoQSW.Controllers
 
             if (ModelState.IsValid)
             {
-                var loginValido = _db.Alunos.Any(x => x.Login == viewModel.Login);
-                var senhaValida = _db.Alunos.Any(x => x.Senha == viewModel.Senha);
+                var loginValido = db.Alunos.Any(x => x.Login == viewModel.Login);
+                var senhaValida = db.Alunos.Any(x => x.Senha == viewModel.Senha);
                 if (loginValido && senhaValida)
                 {
-                    return RedirectToAction("Index", "Turma", new { login = viewModel.Login });
+                    return RedirectToAction("Inscrever", "Turma", new { login = viewModel.Login });
                 }
                 if (!loginValido) { ModelState.AddModelError("login", "Verifique seu login e tente novamente"); }
                 if (!senhaValida) { ModelState.AddModelError("senha", "Verifique sua senha e tente novamente"); }

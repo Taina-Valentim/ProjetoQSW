@@ -8,14 +8,11 @@ namespace ProjetoQSW.Controllers
 {
     public class MateriaController : Controller
     {
-        private readonly EscolinhaContext _db;
-        public MateriaController(EscolinhaContext db)
-        {
-            _db = db;
-        }
+        public EscolinhaBancoSimulado db = new EscolinhaBancoSimulado();
         public IActionResult Index()
         {
-            return View(_db.Materias);
+            db.PopularBancoSimulado();
+            return View(db.Materias);
         }
     }
 }

@@ -6,14 +6,11 @@ namespace ProjetoQSW.Controllers
 {
     public class AlunoController : Controller
     {
-        private readonly EscolinhaContext _db;
-        public AlunoController(EscolinhaContext db)
-        {
-            _db = db;
-        }
+        public EscolinhaBancoSimulado db = new EscolinhaBancoSimulado();
         public IActionResult Index()
         {
-            return View(_db.Alunos);
+            db.PopularBancoSimulado();
+            return View(db.Alunos);
         }
     }
 }
