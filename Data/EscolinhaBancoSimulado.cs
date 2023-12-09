@@ -10,16 +10,9 @@ namespace ProjetoQSW.Data
         public List<Materia>? Materias { get; set; }
         public List<Historico>? Historicos { get; set; }
         public List<Turma>? Turmas { get; set; }
-        public bool? EhLogado { get; set; } = false;
-        public bool EhPopulado { get; set; } = false;
 
         public EscolinhaBancoSimulado()
         {
-            if(!EhPopulado)
-            {
-                PopularBancoSimulado();
-            }
-            
         }
 
 
@@ -282,6 +275,14 @@ namespace ProjetoQSW.Data
             qualidadeDeSoftware.PreRequisito = arquiteturaDeSoftware;
             servicoesDeRedes.PreRequisito = redesDeComputadores;
 
+
+            var materiaTesteCreditos = new Materia()
+            {
+                Id = 100,
+                Nome = "Teste Créditos",
+                Creditos = 100
+            };
+
             Materias = new List<Materia>()
             {
                 analiseOrientadaAObjetos,
@@ -304,7 +305,8 @@ namespace ProjetoQSW.Data
                 projetosDeSistemasI,
                 qualidadeDeSoftware,
                 redesDeComputadores,
-                servicoesDeRedes
+                servicoesDeRedes,
+                materiaTesteCreditos
             };
 
             /****************************** INSERTS ESTADO  ******************************/
@@ -577,7 +579,7 @@ namespace ProjetoQSW.Data
             {
                 Id = 11,
                 Dia = "Segunda",
-                Horario = "Última",
+                Horario = "Primeira",
                 Vagas = 8,
                 Materia = interacaoHumanoComputador,
                 AlunosInscritos = new List<Aluno>()
@@ -672,6 +674,8 @@ namespace ProjetoQSW.Data
                 Materia = servicoesDeRedes,
                 AlunosInscritos = new List<Aluno>()
             };
+
+
 
             Turmas = new List<Turma>()
             {
